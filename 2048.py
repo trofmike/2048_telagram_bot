@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import botan
 import constant_2048
 import telebot
 import urllib   
@@ -6,6 +7,7 @@ import logging
 from board import Board
 from telebot import types
 import sqlite3
+
 # Using the ReplyKeyboardMarkup class
 # It's constructor can take the following optional arguments:
 # - resize_keyboard: True/False (default False)
@@ -20,8 +22,9 @@ chr_UP = u'\u2191'
 chr_DOWN = u'\u2193'
 chr_LEFT = u'\u2190'
 chr_RIGHT = u'\u2192'
-#board = Board()
 API_TOKEN = constant_2048.API_TOKEN
+botan_token = constant_2048.BOTAN_TOKEN # Token got from @botaniobot
+
 
 tb = telebot.TeleBot(API_TOKEN)
 logger = telebot.logger
@@ -117,6 +120,12 @@ def game_start(message):
     markup.row(chr_UP)
     markup.row(chr_LEFT, chr_DOWN, chr_RIGHT)
     tb.send_message(message.chat.id, "```" + s + "```", parse_mode = "Markdown", reply_markup = markup)
+    uid = message.chat.id
+    message_dict = message.to_dict()
+    event_name = message.text
+    print botan.track(botan_token, uid, message_dict, event_name)
+
+
 
 @tb.message_handler(content_types=['text'])
 def game_arrow(message):
@@ -145,15 +154,12 @@ def game_arrow(message):
         for x in array_x:
             print 'list from db'
             print list_from_db
-#                print 'array_x'
-#                print array_x
             j = []
             for y in array_x:
                 j.append(int(list_from_db[4*x+y]))
             print j
             if (j!=''):
                 board.setCol(x, j)
-#        global score
         if message.text == chr_UP:
             print 'UP'
             score += board.move(Board.UP)
