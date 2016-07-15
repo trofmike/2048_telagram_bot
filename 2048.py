@@ -139,7 +139,10 @@ def game_arrow(message):
         array_x = range(board.size())
         for x in array_x:
             for y in array_x:
+                print 'list from db'
                 print list_from_db
+                print 'array_x'
+                print array_x
                 j = list_from_db[4*x+y]
                 if (j!=''):
                     board.setCell(x,y, int(j))
