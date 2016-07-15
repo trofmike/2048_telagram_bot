@@ -20,17 +20,17 @@ chr_UP = u'\u2191'
 chr_DOWN = u'\u2193'
 chr_LEFT = u'\u2190'
 chr_RIGHT = u'\u2192'
-board = Board()
+#board = Board()
 API_TOKEN = constant_2048.API_TOKEN
 
 tb = telebot.TeleBot(API_TOKEN)
 logger = telebot.logger
 telebot.logger.setLevel(logging.DEBUG)
-def getCellStr(x, y):  # TODO: refactor regarding issue #11
+def getCellStr(board, x, y):  # TODO: refactor regarding issue #11
     """
     return a string representation of the cell located at x,y.
     """
-    global board
+#    global board
     c = board.getCell(x, y)
 
     if c == 0:
@@ -66,8 +66,8 @@ def getCellStr(x, y):  # TODO: refactor regarding issue #11
 
     return s
 
-def boardToStringBD():
-    global board
+def boardToStringBD(board):
+#    global board
     l = []
     stringCell = ''
     array_x = range(board.size())
@@ -80,15 +80,15 @@ def boardToStringBD():
             l.append(j)
     return stringCell
 
-def boardToString():
+def boardToString(board):
     """
     return a string representation of the current board.
     """
-    global board
-    b = board
-    rg = range(b.size())
+#    global board
+#    b = board
+    rg = range(board.size())
     s = "┌────┬────┬────┬────┐\n"+"┌────┬────┬────┬────┐\n|"+"|\n╞════╪════╪════╪════╡\n|".join(
-        ['|'.join([getCellStr(x, y) for x in rg]) for y in rg])
+        ['|'.join([getCellStr(board, x, y) for x in rg]) for y in rg])
     s = s + "|\n└────┴────┴────┴────┘"
     return s
 
@@ -103,7 +103,7 @@ Hi there, I am 2048bot. For game starting click /game
 @tb.message_handler(commands=['game'])
 def game_start(message):
     # or add strings one row at a time:
-    global score
+#    global score
     markup = types.ReplyKeyboardMarkup()
     board = Board()
     score = 0
@@ -111,9 +111,9 @@ def game_start(message):
     con = sqlite3.connect('2048.db')
     with con:
         cur = con.cursor()
-        cur.execute('INSERT or REPLACE INTO users (id, board) VALUES ('+chat_id+', "'+boardToStringBD()+'");')
+        cur.execute('INSERT or REPLACE INTO users (id, board, score) VALUES ('+chat_id+', "'+boardToStringBD(board)+'", "'+str(score)+'");')
     con.close()
-    s = boardToString()
+    s = boardToString(board)
     markup.row(chr_UP)
     markup.row(chr_LEFT, chr_DOWN, chr_RIGHT)
     tb.send_message(message.chat.id, "```" + s + "```", parse_mode = "Markdown", reply_markup = markup)
@@ -139,7 +139,8 @@ def game_arrow(message):
             score = int(data_from_db[1])
         else:
             score = 0
-        global board 
+
+        board = Board()
         array_x = range(board.size())
         for x in array_x:
             print 'list from db'
@@ -154,8 +155,10 @@ def game_arrow(message):
                 board.setCol(x, j)
 #        global score
         if message.text == chr_UP:
+            print 'UP'
             score += board.move(Board.UP)
         if message.text == chr_DOWN:
+            print 'DOWN'
             score += board.move(Board.DOWN)
         if message.text == chr_RIGHT:
             score += board.move(Board.RIGHT)
@@ -164,10 +167,10 @@ def game_arrow(message):
         
         with con:
             cur = con.cursor()
-            cur.execute('INSERT or REPLACE INTO users (id, board, score) VALUES ('+chat_id+', "'+boardToStringBD()+'", "'+str(score)+'");')
+            cur.execute('INSERT or REPLACE INTO users (id, board, score) VALUES ('+chat_id+', "'+boardToStringBD(board)+'", "'+str(score)+'");')
         con.close()
         
-        s = boardToString()
+        s = boardToString(board)
         tb.send_message(message.chat.id,  "Score: "+ str(score) + "```" + s + "```", parse_mode = "Markdown")
     except Exception:
         print 'wtf!'
