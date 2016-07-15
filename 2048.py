@@ -22,7 +22,6 @@ chr_LEFT = u'\u2190'
 chr_RIGHT = u'\u2192'
 board = Board()
 API_TOKEN = constant_2048.API_TOKEN
-#API_TOKEN = ''
 
 tb = telebot.TeleBot(API_TOKEN)
 logger = telebot.logger
@@ -127,7 +126,7 @@ def game_arrow(message):
         chat_id = str(message.chat.id)
         with con:
             cur = con.cursor()
-            cur.execute('SELECT board FROM users WHERE id='+chat_id+';')
+            cur.execute('SELECT board, score FROM users WHERE id='+chat_id+';')
         data_from_db = cur.fetchone()
         
         list_from_db = []
@@ -136,6 +135,10 @@ def game_arrow(message):
             list_from_db = data_from_db[0].split(',')
         else: 
             list_from_db = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0".split(',')
+        if data_from_db[1]:
+            score = int(data_from_db[1])
+        else:
+            score = 0
         global board 
         array_x = range(board.size())
         for x in array_x:
@@ -149,7 +152,7 @@ def game_arrow(message):
             print j
             if (j!=''):
                 board.setCol(x, j)
-        global score
+#        global score
         if message.text == chr_UP:
             score += board.move(Board.UP)
         if message.text == chr_DOWN:
@@ -161,7 +164,7 @@ def game_arrow(message):
         
         with con:
             cur = con.cursor()
-            cur.execute('INSERT or REPLACE INTO users (id, board) VALUES ('+chat_id+', "'+boardToStringBD()+'");')
+            cur.execute('INSERT or REPLACE INTO users (id, board, score) VALUES ('+chat_id+', "'+boardToStringBD()+'", "'+str(score)+'");')
         con.close()
         
         s = boardToString()
