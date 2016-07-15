@@ -58,6 +58,7 @@ def boardToString():
 @tb.message_handler(commands=['help', 'start'])
 def send_welcome(message):
     global board 
+    global score
     board = Board()
     score = 0
     msg = tb.reply_to(message, """\
