@@ -53,9 +53,8 @@ def boardToString():
     global board
     b = board
     rg = range(b.size())
-    s = '\n'.join(
-        ["┌────┬────┬────┬────┐" + 
-".join([getCellStr(x, y) for x in rg]) for y in rg])"
+    s = "┌────┬────┬────┬────┐\n" + '\n'.join(
+        [".join([getCellStr(x, y) for x in rg]) for y in rg])"] + "\n└────┴────┴────┴────┘"
     return s
 
 # Handle '/start' and '/help'
