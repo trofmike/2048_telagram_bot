@@ -70,26 +70,33 @@ Hi there, I am 2048bot
 @tb.message_handler(commands=['game'])
 def game_start(message):
     # or add strings one row at a time:
-    markup = types.ReplyKeyboardMarkup()
-    markup.row(chr_UP)
-    markup.row(chr_LEFT, chr_DOWN, chr_RIGHT)
-    tb.send_message(message.chat.id, chr_UP,reply_markup = markup)
+    try:
+        markup = types.ReplyKeyboardMarkup()
+        markup.row(chr_UP)
+        markup.row(chr_LEFT, chr_DOWN, chr_RIGHT)
+        tb.send_message(message.chat.id, chr_UP,reply_markup = markup)
+    except:
+        send_welcome(message)
 
 @tb.message_handler(content_types=['text'])
 def game_arrow(message):
-    global board
-    if message.text == chr_UP:
-        board.move(Board.UP)
-        tb.reply_to(message, "UP")
-    if message.text == chr_DOWN:
-        board.move(Board.DOWN)
-        tb.reply_to(message, "DOWN")
-    if message.text == chr_RIGHT:
-        board.move(Board.RIGHT)
-        tb.reply_to(message, "RIGHT")
-    if message.text == chr_LEFT:
-        board.move(Board.LEFT)
-        tb.reply_to(message, "LEFT")
-    s = boardToString()
-    tb.reply_to(message, s)
+    try:
+        global board
+        if message.text == chr_UP:
+            board.move(Board.UP)
+            tb.reply_to(message, "UP")
+        if message.text == chr_DOWN:
+            board.move(Board.DOWN)
+            tb.reply_to(message, "DOWN")
+        if message.text == chr_RIGHT:
+            board.move(Board.RIGHT)
+            tb.reply_to(message, "RIGHT")
+        if message.text == chr_LEFT:
+            board.move(Board.LEFT)
+            tb.reply_to(message, "LEFT")
+        s = boardToString()
+        tb.reply_to(message, s)
+    except:
+        send_welcome(message)
+
 tb.polling()
