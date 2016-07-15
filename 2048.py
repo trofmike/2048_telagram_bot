@@ -2,6 +2,7 @@ import telebot
 import urllib   
 from board import Board
 from telebot import types
+import 2048_constant
 # Using the ReplyKeyboardMarkup class
 # It's constructor can take the following optional arguments:
 # - resize_keyboard: True/False (default False)
@@ -16,8 +17,9 @@ chr_UP = u'\u2191'
 chr_DOWN = u'\u2193'
 chr_LEFT = u'\u2190'
 chr_RIGHT = u'\u2192'
+board = Board()
 
-API_TOKEN = ''
+API_TOKEN = 2048_constant.API_TOKEN
 
 tb = telebot.TeleBot(API_TOKEN)
 
@@ -51,7 +53,8 @@ def boardToString():
     b = board
     rg = range(b.size())
     s = '\n'.join(
-        [' '.join([getCellStr(x, y) for x in rg]) for y in rg])
+        ["┌────┬────┬────┬────┐" + 
+".join([getCellStr(x, y) for x in rg]) for y in rg])"
     return s
 
 # Handle '/start' and '/help'
@@ -75,7 +78,7 @@ def game_start(message):
         markup.row(chr_UP)
         markup.row(chr_LEFT, chr_DOWN, chr_RIGHT)
         tb.send_message(message.chat.id, chr_UP,reply_markup = markup)
-    except:
+    except e,Exception:
         send_welcome(message)
 
 @tb.message_handler(content_types=['text'])
@@ -96,7 +99,7 @@ def game_arrow(message):
             tb.reply_to(message, "LEFT")
         s = boardToString()
         tb.reply_to(message, s)
-    except:
+    except e,Exception:
         send_welcome(message)
 
 tb.polling()
