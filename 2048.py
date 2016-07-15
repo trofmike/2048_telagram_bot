@@ -140,7 +140,7 @@ def game_arrow(message):
         for x in array_x:
             for y in array_x:
                 print list_from_db
-                j = list_from_db.pop()
+                j = list_from_db[4*x+y]
                 if (j!=''):
                     board.setCell(x,y, int(j))
         global score
@@ -160,6 +160,6 @@ def game_arrow(message):
         
         s = boardToString()
         tb.send_message(message.chat.id,  "Score: "+ str(score) + "```" + s + "```", parse_mode = "Markdown")
-    except e, Exception:
+    except Exception:
         send_welcome(message)
 tb.polling()
