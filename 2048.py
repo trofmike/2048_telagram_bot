@@ -2,7 +2,7 @@ import telebot
 import urllib   
 from board import Board
 from telebot import types
-import 2048_constant
+import constant_2048
 # Using the ReplyKeyboardMarkup class
 # It's constructor can take the following optional arguments:
 # - resize_keyboard: True/False (default False)
@@ -19,7 +19,7 @@ chr_LEFT = u'\u2190'
 chr_RIGHT = u'\u2192'
 board = Board()
 
-API_TOKEN = 2048_constant.API_TOKEN
+API_TOKEN = constant_2048.API_TOKEN
 
 tb = telebot.TeleBot(API_TOKEN)
 
