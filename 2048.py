@@ -120,42 +120,46 @@ def game_start(message):
 
 @tb.message_handler(content_types=['text'])
 def game_arrow(message):
-    
-    con = sqlite3.connect('2048.db')
-    chat_id = str(message.chat.id)
-    with con:
-        cur = con.cursor()
-        cur.execute('SELECT board FROM users WHERE id='+chat_id+';')
-    data_from_db = cur.fetchone()
-    
-    list_from_db = []
+    try:
+        
+        con = sqlite3.connect('2048.db')
+        chat_id = str(message.chat.id)
+        with con:
+            cur = con.cursor()
+            cur.execute('SELECT board FROM users WHERE id='+chat_id+';')
+        data_from_db = cur.fetchone()
+        
+        list_from_db = []
 
-    if data_from_db:
-        list_from_db = data_from_db[0].split(',')
-    else: 
-        list_from_db = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0".split(',')
-    global board 
-    array_x = range(board.size())
-    for x in array_x:
-        for y in array_x:
-            j = list_from_db.pop(x-1+4*(y-1))
-            if (j!=''):
-                board.setCell(x,y, int(j))
-    global score
-    if message.text == chr_UP:
-        score += board.move(Board.UP)
-    if message.text == chr_DOWN:
-        score += board.move(Board.DOWN)
-    if message.text == chr_RIGHT:
-        score += board.move(Board.RIGHT)
-    if message.text == chr_LEFT:
-        score += board.move(Board.LEFT)
-    
-    with con:
-        cur = con.cursor()
-        cur.execute('INSERT or REPLACE INTO users (id, board) VALUES ('+chat_id+', "'+boardToStringBD()+'");')
-    con.close()
-    
-    s = boardToString()
-    tb.send_message(message.chat.id,  "Score: "+ str(score) + "```" + s + "```", parse_mode = "Markdown")
+        if data_from_db:
+            list_from_db = data_from_db[0].split(',')
+        else: 
+            list_from_db = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0".split(',')
+        global board 
+        array_x = range(board.size())
+        for x in array_x:
+            for y in array_x:
+                print list_from_db
+                j = list_from_db.pop()
+                if (j!=''):
+                    board.setCell(x,y, int(j))
+        global score
+        if message.text == chr_UP:
+            score += board.move(Board.UP)
+        if message.text == chr_DOWN:
+            score += board.move(Board.DOWN)
+        if message.text == chr_RIGHT:
+            score += board.move(Board.RIGHT)
+        if message.text == chr_LEFT:
+            score += board.move(Board.LEFT)
+        
+        with con:
+            cur = con.cursor()
+            cur.execute('INSERT or REPLACE INTO users (id, board) VALUES ('+chat_id+', "'+boardToStringBD()+'");')
+        con.close()
+        
+        s = boardToString()
+        tb.send_message(message.chat.id,  "Score: "+ str(score) + "```" + s + "```", parse_mode = "Markdown")
+    except e, Exception:
+        send_welcome(message)
 tb.polling()
