@@ -138,7 +138,7 @@ def game_arrow(message):
     array_x = range(board.size())
     for x in array_x:
         for y in array_x:
-            j = list_from_db.pop(x+4*y)
+            j = list_from_db.pop(x-1+4*(y-1))
             if (j!=''):
                 board.setCell(x,y, int(j))
     global score
