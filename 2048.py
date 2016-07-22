@@ -192,4 +192,4 @@ def game_arrow(message):
     except Exception:
         print 'wtf!'
         send_welcome(message)
-tb.polling(none_stop=False, interval=0, block=True)
+tb.polling(none_stop=False, interval=0)
