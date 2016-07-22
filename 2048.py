@@ -28,7 +28,11 @@ botan_token = constant_2048.BOTAN_TOKEN # Token got from @botaniobot
 
 tb = telebot.TeleBot(API_TOKEN)
 logger = telebot.logger
+fh = logging.FileHandler('spam.log')
 telebot.logger.setLevel(logging.DEBUG)
+logger.addHandler(fh) 
+
+
 def getCellStr(board, x, y):  # TODO: refactor regarding issue #11
     """
     return a string representation of the cell located at x,y.
@@ -101,7 +105,7 @@ def boardToString(board):
 #    global board
 #    b = board
     rg = range(board.size())
-    s = "┌────┬────┬────┬────┐\n"+"┌────┬────┬────┬────┐\n|"+"|\n╞════╪════╪════╪════╡\n|".join(
+    s = "┌────┬────┬────┬────┐\n|"+"|\n╞════╪════╪════╪════╡\n|".join(
         ['|'.join([getCellStr(board, x, y) for x in rg]) for y in rg])
     s = "\n" + s + "|\n└────┴────┴────┴────┘"
     return s
@@ -172,10 +176,10 @@ def game_arrow(message):
             if (j!=''):
                 board.setCol(x, j)
         if message.text == chr_UP:
-            print 'UP'
+#            print 'UP'
             score += board.move(Board.UP)
         if message.text == chr_DOWN:
-            print 'DOWN'
+#            print 'DOWN'
             score += board.move(Board.DOWN)
         if message.text == chr_RIGHT:
             score += board.move(Board.RIGHT)
@@ -188,8 +192,9 @@ def game_arrow(message):
         con.close()
         
         s = boardToString(board)
-        tb.send_message(message.chat.id,  "Score: "+ str(score) + "```" + s + "```", parse_mode = "Markdown")
-    except Exception:
+        tb.send_message(message.chat.id,  "Score: "+ str(score) +"\n" +"```" + s + "```", parse_mode = "Markdown")
+    except Exception,e:
+        print e
         print 'wtf!'
         send_welcome(message)
 tb.polling(none_stop=False, interval=0.1)
