@@ -134,7 +134,7 @@ def game_start(message):
     uid = message.chat.id
     message_dict = message.to_dict()
     event_name = message.text
-    print botan.track(botan_token, uid, message_dict, event_name)
+#    print botan.track(botan_token, uid, message_dict, event_name)
 
 
 
