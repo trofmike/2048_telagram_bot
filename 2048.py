@@ -131,9 +131,9 @@ def game_start(message):
     markup.row(chr_UP)
     markup.row(chr_LEFT, chr_DOWN, chr_RIGHT)
     tb.send_message(message.chat.id, "```" + s + "```", parse_mode = "Markdown", reply_markup = markup)
-    uid = message.chat.id
-    message_dict = message.to_dict()
-    event_name = message.text
+#    uid = message.chat.id
+#    message_dict = message.to_dict()
+#    event_name = message.text
 #    print botan.track(botan_token, uid, message_dict, event_name)
 
 
