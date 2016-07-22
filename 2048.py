@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import botan
+#import botan
 import constant_2048
 import telebot
 import urllib   
@@ -66,7 +66,18 @@ def getCellStr(board, x, y):  # TODO: refactor regarding issue #11
         s = '8192'
     else:
         s = '%3d' % c
-
+# 2 \ud83d\ude36\n
+# 4 \ud83d\ude10\n
+# 8 \ud83d\ude42\n
+# 16 \ud83d\ude0a\n
+# 32 \ud83d\ude00\n
+# 64 \ud83d\ude05\n
+# 128 \ud83d\ude1d\n
+# 256 \ud83d\ude02\n
+# 512 \ud83d\ude07\n
+# 1024 \ud83d\ude2c\n
+# 2048 \ud83d\ude0e\n
+# 4096 \ud83d\udc7d
     return s
 
 def boardToStringBD(board):
