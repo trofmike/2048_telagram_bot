@@ -101,9 +101,9 @@ def boardToString(board):
 #    global board
 #    b = board
     rg = range(board.size())
-    s = "\n┌────┬────┬────┬────┐\n"+"┌────┬────┬────┬────┐\n|"+"|\n╞════╪════╪════╪════╡\n|".join(
+    s = "┌────┬────┬────┬────┐\n"+"┌────┬────┬────┬────┐\n|"+"|\n╞════╪════╪════╪════╡\n|".join(
         ['|'.join([getCellStr(board, x, y) for x in rg]) for y in rg])
-    s = s + "|\n└────┴────┴────┴────┘"
+    s = "\n" + s + "|\n└────┴────┴────┴────┘"
     return s
 
 # Handle '/start' and '/help'
@@ -192,4 +192,4 @@ def game_arrow(message):
     except Exception:
         print 'wtf!'
         send_welcome(message)
-tb.polling(none_stop=False, interval=0)
+tb.polling(none_stop=False, interval=0.1)
