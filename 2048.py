@@ -101,7 +101,7 @@ def boardToString(board):
 #    global board
 #    b = board
     rg = range(board.size())
-    s = "┌────┬────┬────┬────┐\n"+"┌────┬────┬────┬────┐\n|"+"|\n╞════╪════╪════╪════╡\n|".join(
+    s = "\n┌────┬────┬────┬────┐\n"+"┌────┬────┬────┬────┐\n|"+"|\n╞════╪════╪════╪════╡\n|".join(
         ['|'.join([getCellStr(board, x, y) for x in rg]) for y in rg])
     s = s + "|\n└────┴────┴────┴────┘"
     return s
