@@ -192,7 +192,11 @@ def game_arrow(message):
         con.close()
         
         s = boardToString(board)
-        tb.send_message(message.chat.id,  "Score: "+ str(score) +"\n" +"```" + s + "```", parse_mode = "Markdown")
+        if board.canMove():
+            tb.send_message(message.chat.id,  "Score: "+ str(score) +"\n" +"```" + s + "```", parse_mode = "Markdown")
+        else:
+            score = 0
+            tb.send_message(message.chat.id, "Game Over\nYou can start new game, if click /game")
     except Exception,e:
         print e
         print 'wtf!'
